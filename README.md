@@ -90,7 +90,7 @@ Output:
 
 A `flow-runtime` `Validation` object containing an `errors` array of `[path, message, type]` tuples.
 
-#### `options: {reduxFormStyle?: boolean}`
+#### `options?: {reduxFormStyle?: boolean}`
 
 If `reduxFormStyle` is true, validation errors on object/array fields will be yielded for the `_error` subpath
 under that field.
@@ -110,7 +110,7 @@ A reified `flow-runtime` `Type`, or a function taking an attribute value and ret
 object or `null`.  Errors from applying the given function or validating against the given type will be yielded in
 `sequelize-validate-subfields` format.
 
-#### `options: {reduxFormStyle?: boolean}`
+#### `options?: {reduxFormStyle?: boolean}`
 
 If `reduxFormStyle` is true, validation errors on object/array fields will be yielded for the `_error` subpath
 under that field.
