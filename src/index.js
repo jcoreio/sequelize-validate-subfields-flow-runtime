@@ -1,7 +1,7 @@
 // @flow
 
 import t, {validate} from 'flow-runtime'
-import get from 'lodash.get'
+import { get } from "lodash"
 import type {Type, Validation} from 'flow-runtime'
 import {validateSubfields} from 'sequelize-validate-subfields'
 import type {FieldValidation} from 'sequelize-validate-subfields'

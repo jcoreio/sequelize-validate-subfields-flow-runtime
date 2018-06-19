@@ -1,9 +1,19 @@
 {
-  "presets": ["es2015", "stage-1", "flow"],
-  "plugins": ["transform-runtime"],
-  "env": {
-    "test": {
-      "plugins": ["istanbul"]
-    }
-  }
+  presets: [
+    'es2015',
+    'stage-1',
+    'flow',
+  ],
+  plugins: [
+    'transform-runtime',
+    'lodash',
+  ],
+  env: {
+    test: {
+      plugins: [
+        'istanbul',
+        'lodash',
+      ],
+    },
+  },
 }
