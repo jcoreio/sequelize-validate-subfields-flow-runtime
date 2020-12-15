@@ -1,21 +1,26 @@
 // @flow
 
-import {reify, validate} from 'flow-runtime'
-import type {Type} from 'flow-runtime'
-import {validateWithFlowRuntime} from '../src'
-import {expect} from 'chai'
+import t, { reify } from 'flow-runtime'
+import type { Type } from 'flow-runtime'
+import { validateWithFlowRuntime } from '../src'
+import { expect } from 'chai'
 
 type PostalCode = string
 const PostalCodeType = (reify: Type<PostalCode>)
-PostalCodeType.addConstraint((postalCode: string) => {
-  if (!/^\d{4,5}$/.test(postalCode)) return 'must be a 4 or 5-digit postal code'
-})
+PostalCodeType.addConstraint(
+  (postalCode: string): ?string => {
+    if (!/^\d{4,5}$/.test(postalCode))
+      return 'must be a 4 or 5-digit postal code'
+  }
+)
 
 type NonEmptyString = string
 const NonEmptyStringType = (reify: Type<NonEmptyString>)
-NonEmptyStringType.addConstraint((value: string) => {
-  if (value === '') return 'must not be empty'
-})
+NonEmptyStringType.addConstraint(
+  (value: string): ?string => {
+    if (value === '') return 'must not be empty'
+  }
+)
 
 type Address = {
   line1: NonEmptyString,
@@ -41,17 +46,20 @@ describe('validateWithFlowRuntime', () => {
         address: {
           line1: '',
           postalCode: '123',
-        }
+        },
       })
       throw new Error('expected an error to be thrown')
     } catch (error) {
       expect(error.validation).to.deep.equal({
         errors: [
-          {path: ['username'], message: 'must not be empty'},
-          {path: ['address', 'line1'], message: 'must not be empty'},
-          {path: ['address', 'postalCode'], message: 'must be a 4 or 5-digit postal code'},
-          {path: ['address', 'state'], message: 'must be a string'},
-        ]
+          { path: ['username'], message: 'must not be empty' },
+          { path: ['address', 'line1'], message: 'must not be empty' },
+          {
+            path: ['address', 'postalCode'],
+            message: 'must be a 4 or 5-digit postal code',
+          },
+          { path: ['address', 'state'], message: 'must be a string' },
+        ],
       })
     }
 
@@ -63,14 +71,14 @@ describe('validateWithFlowRuntime', () => {
       throw new Error('expected an error to be thrown')
     } catch (error) {
       expect(error.validation).to.deep.equal({
-        errors: [
-          {path: ['address'], message: 'must be an object'},
-        ]
+        errors: [{ path: ['address'], message: 'must be an object' }],
       })
     }
   })
   it('works for reduxFormStyle', () => {
-    const validator = validateWithFlowRuntime(UserType, {reduxFormStyle: true})
+    const validator = validateWithFlowRuntime(UserType, {
+      reduxFormStyle: true,
+    })
 
     try {
       validator({
@@ -78,17 +86,20 @@ describe('validateWithFlowRuntime', () => {
         address: {
           line1: '',
           postalCode: '123',
-        }
+        },
       })
       throw new Error('expected an error to be thrown')
     } catch (error) {
       expect(error.validation).to.deep.equal({
         errors: [
-          {path: ['username'], message: 'must not be empty'},
-          {path: ['address', 'line1'], message: 'must not be empty'},
-          {path: ['address', 'postalCode'], message: 'must be a 4 or 5-digit postal code'},
-          {path: ['address', 'state'], message: 'must be a string'},
-        ]
+          { path: ['username'], message: 'must not be empty' },
+          { path: ['address', 'line1'], message: 'must not be empty' },
+          {
+            path: ['address', 'postalCode'],
+            message: 'must be a 4 or 5-digit postal code',
+          },
+          { path: ['address', 'state'], message: 'must be a string' },
+        ],
       })
     }
 
@@ -100,14 +111,14 @@ describe('validateWithFlowRuntime', () => {
       throw new Error('expected an error to be thrown')
     } catch (error) {
       expect(error.validation).to.deep.equal({
-        errors: [
-          {path: ['address', '_error'], message: 'must be an object'},
-        ]
+        errors: [{ path: ['address', '_error'], message: 'must be an object' }],
       })
     }
   })
   it('works for validation function', () => {
-    const validator = validateWithFlowRuntime(user => validate(UserType, user))
+    const validator = validateWithFlowRuntime(user =>
+      t.validate(UserType, user)
+    )
 
     try {
       validator({
@@ -115,17 +126,20 @@ describe('validateWithFlowRuntime', () => {
         address: {
           line1: '',
           postalCode: '123',
-        }
+        },
       })
       throw new Error('expected an error to be thrown')
     } catch (error) {
       expect(error.validation).to.deep.equal({
         errors: [
-          {path: ['username'], message: 'must not be empty'},
-          {path: ['address', 'line1'], message: 'must not be empty'},
-          {path: ['address', 'postalCode'], message: 'must be a 4 or 5-digit postal code'},
-          {path: ['address', 'state'], message: 'must be a string'},
-        ]
+          { path: ['username'], message: 'must not be empty' },
+          { path: ['address', 'line1'], message: 'must not be empty' },
+          {
+            path: ['address', 'postalCode'],
+            message: 'must be a 4 or 5-digit postal code',
+          },
+          { path: ['address', 'state'], message: 'must be a string' },
+        ],
       })
     }
 
@@ -137,9 +151,7 @@ describe('validateWithFlowRuntime', () => {
       throw new Error('expected an error to be thrown')
     } catch (error) {
       expect(error.validation).to.deep.equal({
-        errors: [
-          {path: ['address'], message: 'must be an object'},
-        ]
+        errors: [{ path: ['address'], message: 'must be an object' }],
       })
     }
   })
@@ -150,7 +162,7 @@ describe('validateWithFlowRuntime', () => {
       address: {
         line1: '',
         postalCode: '123',
-      }
+      },
     })
   })
 })
